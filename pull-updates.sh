@@ -21,6 +21,7 @@ function _dl() {
 }
 
 function _main() {
+	_dl catppuccin/nvim
 	_dl cocopon/iceberg.vim
 	_dl dracula/vim
 	_dl lifepillar/vim-solarized8
