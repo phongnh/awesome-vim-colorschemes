@@ -25,6 +25,7 @@ function _main() {
 	_dl lifepillar/vim-solarized8
 	_dl nordtheme/vim
 	_dl sainnhe/sonokai
+	_dl sainnhe/edge
 	_dl whatyouhide/vim-gotham
 	_dl sainnhe/everforest
 
