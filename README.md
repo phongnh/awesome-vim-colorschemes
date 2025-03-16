@@ -8,15 +8,25 @@ Use your favorite package-manager to install, and enjoy!
 
 ## Color Schemes
 
-| Scheme         | Description | Terminal | GUI |
-| -------------- | ------------|:--------:|:---:|
-| [gotham] | Very dark vim colorscheme | ✓ | ✓ |
-| [iceberg] | Dark blue color scheme | ✓ | ✓ |
-| [nord] | An arctic, north-bluish clean and elegant theme | ✓ (16) | ✓ |
-| [solarized8] | Optimized Solarized colorschemes | ✓ (16) | ✓ |
-| [sonokai] | Vivid and high contrast based on Monokai Pro | ✓ | ✓ |
+| Scheme | Description |
+|--------|-------------|
+| [catppuccin] | Soothing pastel theme for Vim |
+| [dracula] | Dark theme for Vim |
+| [edge] | Clean & Elegant Color Scheme inspired by Atom One and Material |
+| [everforest] | Comfortable & Pleasant Color Scheme for Vim |
+| [gotham] | Code never sleeps in Gotham City |
+| [gruvbox-material] | Gruvbox with Material Palette |
+| [iceberg] | Bluish color scheme for Vim and Neovim |
+| [nord] | An arctic, north-bluish clean and elegant Vim theme |
+| [solarized8] | Optimized Solarized colorschemes |
+| [sonokai] | High Contrast & Vivid Color Scheme based on Monokai Pro |
 
+[catppuccin]: https://github.com/catppuccin/vim
+[dracula]: https://github.com/dracula/vim
+[edge]: https://github.com/sainnhe/edge
+[everforest]: https://github.com/sainnhe/everforest
 [gotham]: https://github.com/whatyouhide/vim-gotham
+[gruvbox-material]: https://github.com/sainnhe/gruvbox-material
 [iceberg]: https://github.com/cocopon/iceberg.vim
 [nord]: https://github.com/nordtheme/vim
 [solarized8]: https://github.com/lifepillar/vim-solarized8
