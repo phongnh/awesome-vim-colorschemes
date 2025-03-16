@@ -21,9 +21,9 @@ function _dl() {
 }
 
 function _main() {
-	_dl arcticicestudio/nord-vim
 	_dl cocopon/iceberg.vim
 	_dl lifepillar/vim-solarized8
+	_dl nordtheme/vim
 	_dl sainnhe/sonokai
 	_dl whatyouhide/vim-gotham
 

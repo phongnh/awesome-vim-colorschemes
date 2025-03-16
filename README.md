@@ -18,7 +18,7 @@ Use your favorite package-manager to install, and enjoy!
 
 [gotham]: https://github.com/whatyouhide/vim-gotham
 [Iceberg]: https://github.com/cocopon/iceberg.vim
-[nord]: https://github.com/arcticicestudio/nord-vim
+[nord]: https://github.com/nordtheme/vim
 [solarized8]: https://github.com/lifepillar/vim-solarized8
 [sonokai]: https://github.com/sainnhe/sonokai
 
