@@ -11,13 +11,13 @@ Use your favorite package-manager to install, and enjoy!
 | Scheme         | Description | Terminal | GUI |
 | -------------- | ------------|:--------:|:---:|
 | [gotham] | Very dark vim colorscheme | ✓ | ✓ |
-| [Iceberg] | Dark blue color scheme | ✓ | ✓ |
+| [iceberg] | Dark blue color scheme | ✓ | ✓ |
 | [nord] | An arctic, north-bluish clean and elegant theme | ✓ (16) | ✓ |
 | [solarized8] | Optimized Solarized colorschemes | ✓ (16) | ✓ |
 | [sonokai] | Vivid and high contrast based on Monokai Pro | ✓ | ✓ |
 
 [gotham]: https://github.com/whatyouhide/vim-gotham
-[Iceberg]: https://github.com/cocopon/iceberg.vim
+[iceberg]: https://github.com/cocopon/iceberg.vim
 [nord]: https://github.com/nordtheme/vim
 [solarized8]: https://github.com/lifepillar/vim-solarized8
 [sonokai]: https://github.com/sainnhe/sonokai
