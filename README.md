@@ -10,7 +10,6 @@ Use your favorite package-manager to install, and enjoy!
 
 | Scheme | Description |
 |--------|-------------|
-| [catppuccin] | Soothing pastel theme for Vim |
 | [dracula] | Dark theme for Vim |
 | [edge] | Clean & Elegant Color Scheme inspired by Atom One and Material |
 | [everforest] | Comfortable & Pleasant Color Scheme for Vim |
@@ -21,7 +20,6 @@ Use your favorite package-manager to install, and enjoy!
 | [solarized8] | Optimized Solarized colorschemes |
 | [sonokai] | High Contrast & Vivid Color Scheme based on Monokai Pro |
 
-[catppuccin]: https://github.com/catppuccin/vim
 [dracula]: https://github.com/dracula/vim
 [edge]: https://github.com/sainnhe/edge
 [everforest]: https://github.com/sainnhe/everforest
