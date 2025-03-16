@@ -26,6 +26,7 @@ function _main() {
 	_dl nordtheme/vim
 	_dl sainnhe/sonokai
 	_dl whatyouhide/vim-gotham
+	_dl sainnhe/everforest
 
 	chmod -x colors/*vim
 }
