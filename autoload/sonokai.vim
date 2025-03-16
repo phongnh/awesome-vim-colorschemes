@@ -231,7 +231,7 @@ function! sonokai#syn_gen(path, last_modified, msg) "{{{
     call sonokai#ftplugin_detect(a:path)
   else
     echohl WarningMsg | echom '[sonokai] Generated ' . rootpath . syntax_relative_path | echohl None
-    execute 'set runtimepath+=' . fnamemodify(rootpath, ':p') . 'after'
+    execute 'set runtimepath+=' . fnameescape(fnamemodify(rootpath, ':p')) . 'after'
   endif
 endfunction "}}}
 function! sonokai#syn_write(rootpath, syn, content) "{{{
@@ -267,9 +267,10 @@ function! sonokai#syn_write(rootpath, syn, content) "{{{
   call writefile(['" vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker fmr={{{,}}}:'], syn_path, 'a')
 endfunction "}}}
 function! sonokai#syn_rootpath(path) "{{{
+  let plugin_path = fnamemodify(a:path, ':p:h:h')
   " Get the directory where `after/syntax` is generated.
-  if (matchstr(a:path, '^/usr/share') ==# '') " Return the plugin directory. The `after/syntax` directory should never be generated in `/usr/share`, even if you are a root user.
-    return fnamemodify(a:path, ':p:h:h')
+  if (matchstr(a:path, '^/usr/share') ==# '' && filewritable(plugin_path) == 2) " Return the plugin directory. The `after/syntax` directory should never be generated in `/usr/share`, even if you are a root user.
+    return plugin_path
   else " Use vim home directory.
     if has('nvim')
       return stdpath('config')
