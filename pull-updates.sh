@@ -24,10 +24,11 @@ function _main() {
 	_dl cocopon/iceberg.vim
 	_dl lifepillar/vim-solarized8
 	_dl nordtheme/vim
-	_dl sainnhe/sonokai
 	_dl sainnhe/edge
-	_dl whatyouhide/vim-gotham
 	_dl sainnhe/everforest
+	_dl sainnhe/gruvbox-material
+	_dl sainnhe/sonokai
+	_dl whatyouhide/vim-gotham
 
 	chmod -x colors/*vim
 }
