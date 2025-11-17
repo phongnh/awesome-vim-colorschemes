@@ -14,6 +14,7 @@ function _dl() {
 
 	rsync -avh "$tmp"/"$rtp" --include='after/***' \
 		--include='autoload/***' --include='colors/***' \
+		--include='lua/***' \
 		--include='plugin/***' --exclude='*' .
 
 	cp -r "$tmp"/"$rtp"/README* "$docs"/"${1//\//-}".md
@@ -30,6 +31,13 @@ function _main() {
 	_dl sainnhe/gruvbox-material
 	_dl sainnhe/sonokai
 	_dl whatyouhide/vim-gotham
+	_dl catppuccin/nvim
+	_dl EdenEast/nightfox.nvim
+	_dl zenbones-theme/zenbones.nvim
+	_dl mhartington/oceanic-next
+	_dl nordtheme/vim
+	_dl ayu-theme/ayu-vim
+	_dl junegunn/seoul256.vim
 
 	chmod -x colors/*vim
 }
