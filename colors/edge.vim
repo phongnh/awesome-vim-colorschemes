@@ -10,7 +10,7 @@
 let s:configuration = edge#get_configuration()
 let s:palette = edge#get_palette(s:configuration.style, s:configuration.dim_foreground, s:configuration.colors_override)
 let s:path = expand('<sfile>:p') " the path of this script
-let s:last_modified = 'Fri Nov  7 20:31:15 UTC 2025'
+let s:last_modified = 'Mon Feb 24 13:16:19 UTC 2025'
 let g:edge_loaded_file_types = []
 
 if !(exists('g:colors_name') && g:colors_name ==# 'edge' && s:configuration.better_performance)
@@ -22,13 +22,13 @@ endif
 
 let g:colors_name = 'edge'
 
-if !(has('termguicolors') && &termguicolors) && !has('gui_running') && &t_Co < 256
+if !(has('termguicolors') && &termguicolors) && !has('gui_running') && &t_Co != 256
   finish
 endif
 " }}}
 " Common Highlight Groups: {{{
 " UI: {{{
-if s:configuration.transparent_background
+if s:configuration.transparent_background >= 1
   call edge#highlight('Normal', s:palette.fg, s:palette.none)
   call edge#highlight('NormalNC', s:palette.fg, s:palette.none)
   call edge#highlight('Terminal', s:palette.fg, s:palette.none)
@@ -60,11 +60,11 @@ endif
 call edge#highlight('SignColumn', s:palette.fg, s:palette.none)
 call edge#highlight('FoldColumn', s:palette.grey_dim, s:palette.none)
 if has('nvim')
-  call edge#highlight('IncSearch', s:palette.bg0, s:palette.filled_blue)
-  call edge#highlight('Search', s:palette.bg0, s:palette.filled_green)
+  call edge#highlight('IncSearch', s:palette.bg0, s:palette.bg_blue)
+  call edge#highlight('Search', s:palette.bg0, s:palette.bg_green)
 else
-  call edge#highlight('IncSearch', s:palette.filled_blue, s:palette.bg0, 'reverse')
-  call edge#highlight('Search', s:palette.filled_green, s:palette.bg0, 'reverse')
+  call edge#highlight('IncSearch', s:palette.bg_blue, s:palette.bg0, 'reverse')
+  call edge#highlight('Search', s:palette.bg_green, s:palette.bg0, 'reverse')
 endif
 highlight! link CurSearch IncSearch
 call edge#highlight('ColorColumn', s:palette.none, s:palette.bg1)
@@ -91,9 +91,9 @@ if &diff
 else
   call edge#highlight('CursorLineNr', s:palette.grey, s:palette.none)
 endif
-call edge#highlight('DiffAdd', s:palette.none, s:palette.bg_green)
-call edge#highlight('DiffChange', s:palette.none, s:palette.bg_blue)
-call edge#highlight('DiffDelete', s:palette.none, s:palette.bg_red)
+call edge#highlight('DiffAdd', s:palette.none, s:palette.diff_green)
+call edge#highlight('DiffChange', s:palette.none, s:palette.diff_blue)
+call edge#highlight('DiffDelete', s:palette.none, s:palette.diff_red)
 if has('nvim')
   call edge#highlight('DiffText', s:palette.bg0, s:palette.blue)
 else
@@ -115,11 +115,11 @@ endif
 call edge#highlight('Pmenu', s:palette.fg, s:palette.bg2)
 call edge#highlight('PmenuSbar', s:palette.none, s:palette.bg2)
 if s:configuration.menu_selection_background ==# 'blue'
-  call edge#highlight('PmenuSel', s:palette.bg0, s:palette.filled_blue)
+  call edge#highlight('PmenuSel', s:palette.bg0, s:palette.bg_blue)
 elseif s:configuration.menu_selection_background ==# 'green'
-  call edge#highlight('PmenuSel', s:palette.bg0, s:palette.filled_green)
+  call edge#highlight('PmenuSel', s:palette.bg0, s:palette.bg_green)
 elseif s:configuration.menu_selection_background ==# 'purple'
-  call edge#highlight('PmenuSel', s:palette.bg0, s:palette.filled_purple)
+  call edge#highlight('PmenuSel', s:palette.bg0, s:palette.bg_purple)
 endif
 call edge#highlight('PmenuKind', s:palette.purple, s:palette.bg2)
 call edge#highlight('PmenuExtra', s:palette.grey, s:palette.bg2)
@@ -128,21 +128,11 @@ call edge#highlight('PmenuThumb', s:palette.none, s:palette.bg_grey)
 if s:configuration.float_style ==# 'dim'
   call edge#highlight('NormalFloat', s:palette.fg, s:palette.bg_dim)
   call edge#highlight('FloatBorder', s:palette.grey, s:palette.bg_dim)
-  call edge#highlight('FloatTitle', s:palette.purple, s:palette.bg0, 'bold')
-elseif s:configuration.float_style ==# 'blend'
-  if s:configuration.transparent_background
-    highlight! link NormalFloat Normal
-    highlight! link FloatBorder Grey
-    call edge#highlight('FloatTitle', s:palette.purple, s:palette.none, 'bold')
-  else
-    call edge#highlight('NormalFloat', s:palette.fg, s:palette.bg0)
-    call edge#highlight('FloatBorder', s:palette.grey, s:palette.bg0)
-    call edge#highlight('FloatTitle', s:palette.purple, s:palette.bg1, 'bold')
-  endif
+  call edge#highlight('FloatTitle', s:palette.purple, s:palette.bg_dim, 'bold')
 else
   call edge#highlight('NormalFloat', s:palette.fg, s:palette.bg2)
   call edge#highlight('FloatBorder', s:palette.grey, s:palette.bg2)
-  call edge#highlight('FloatTitle', s:palette.purple, s:palette.bg4, 'bold')
+  call edge#highlight('FloatTitle', s:palette.purple, s:palette.bg2, 'bold')
 endif
 call edge#highlight('Question', s:palette.yellow, s:palette.none)
 if s:configuration.spell_foreground ==# 'none'
@@ -163,7 +153,7 @@ if s:configuration.transparent_background == 2
   call edge#highlight('StatusLineTermNC', s:palette.grey, s:palette.none)
   call edge#highlight('TabLine', s:palette.fg, s:palette.bg4)
   call edge#highlight('TabLineFill', s:palette.grey, s:palette.none)
-  call edge#highlight('TabLineSel', s:palette.bg0, s:palette.filled_purple)
+  call edge#highlight('TabLineSel', s:palette.bg0, s:palette.bg_purple)
   if has('nvim')
     call edge#highlight('WinBar', s:palette.fg, s:palette.none, 'bold')
     call edge#highlight('WinBarNC', s:palette.grey, s:palette.none)
@@ -175,7 +165,7 @@ else
   call edge#highlight('StatusLineTermNC', s:palette.grey, s:palette.bg1)
   call edge#highlight('TabLine', s:palette.fg, s:palette.bg4)
   call edge#highlight('TabLineFill', s:palette.grey, s:palette.bg1)
-  call edge#highlight('TabLineSel', s:palette.bg0, s:palette.filled_purple)
+  call edge#highlight('TabLineSel', s:palette.bg0, s:palette.bg_purple)
   if has('nvim')
     call edge#highlight('WinBar', s:palette.fg, s:palette.bg2, 'bold')
     call edge#highlight('WinBarNC', s:palette.grey, s:palette.bg1)
@@ -191,22 +181,20 @@ call edge#highlight('Visual', s:palette.none, s:palette.bg3)
 call edge#highlight('VisualNOS', s:palette.none, s:palette.bg3, 'underline')
 call edge#highlight('QuickFixLine', s:palette.purple, s:palette.none, 'bold')
 call edge#highlight('Debug', s:palette.yellow, s:palette.none)
-call edge#highlight('debugPC', s:palette.bg0, s:palette.filled_green)
-call edge#highlight('debugBreakpoint', s:palette.bg0, s:palette.filled_red)
-call edge#highlight('ToolbarButton', s:palette.bg0, s:palette.filled_purple)
+call edge#highlight('debugPC', s:palette.bg0, s:palette.bg_green)
+call edge#highlight('debugBreakpoint', s:palette.bg0, s:palette.bg_red)
+call edge#highlight('ToolbarButton', s:palette.bg0, s:palette.bg_purple)
 if has('nvim')
   call edge#highlight('Substitute', s:palette.bg0, s:palette.yellow)
   if s:configuration.diagnostic_text_highlight
-    call edge#highlight('DiagnosticError', s:palette.red, s:palette.bg_red)
-    call edge#highlight('DiagnosticUnderlineError', s:palette.none, s:palette.bg_red, 'undercurl', s:palette.red)
-    call edge#highlight('DiagnosticWarn', s:palette.yellow, s:palette.bg_yellow)
-    call edge#highlight('DiagnosticUnderlineWarn', s:palette.none, s:palette.bg_yellow, 'undercurl', s:palette.yellow)
-    call edge#highlight('DiagnosticInfo', s:palette.blue, s:palette.bg_blue)
-    call edge#highlight('DiagnosticUnderlineInfo', s:palette.none, s:palette.bg_blue, 'undercurl', s:palette.blue)
-    call edge#highlight('DiagnosticHint', s:palette.purple, s:palette.bg_purple)
-    call edge#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.bg_purple, 'undercurl', s:palette.purple)
-    call edge#highlight('DiagnosticOk', s:palette.green, s:palette.bg_green)
-    call edge#highlight('DiagnosticUnderlineOk', s:palette.none, s:palette.bg_green, 'undercurl', s:palette.green)
+    call edge#highlight('DiagnosticError', s:palette.red, s:palette.diff_red)
+    call edge#highlight('DiagnosticUnderlineError', s:palette.none, s:palette.diff_red, 'undercurl', s:palette.red)
+    call edge#highlight('DiagnosticWarn', s:palette.yellow, s:palette.diff_yellow)
+    call edge#highlight('DiagnosticUnderlineWarn', s:palette.none, s:palette.diff_yellow, 'undercurl', s:palette.yellow)
+    call edge#highlight('DiagnosticInfo', s:palette.blue, s:palette.diff_blue)
+    call edge#highlight('DiagnosticUnderlineInfo', s:palette.none, s:palette.diff_blue, 'undercurl', s:palette.blue)
+    call edge#highlight('DiagnosticHint', s:palette.green, s:palette.diff_green)
+    call edge#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.diff_green, 'undercurl', s:palette.green)
   else
     call edge#highlight('DiagnosticError', s:palette.red, s:palette.none)
     call edge#highlight('DiagnosticUnderlineError', s:palette.none, s:palette.none, 'undercurl', s:palette.red)
@@ -214,26 +202,21 @@ if has('nvim')
     call edge#highlight('DiagnosticUnderlineWarn', s:palette.none, s:palette.none, 'undercurl', s:palette.yellow)
     call edge#highlight('DiagnosticInfo', s:palette.blue, s:palette.none)
     call edge#highlight('DiagnosticUnderlineInfo', s:palette.none, s:palette.none, 'undercurl', s:palette.blue)
-    call edge#highlight('DiagnosticHint', s:palette.purple, s:palette.none)
-    call edge#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.none, 'undercurl', s:palette.purple)
-    call edge#highlight('DiagnosticOk', s:palette.green, s:palette.none)
-    call edge#highlight('DiagnosticUnderlineOk', s:palette.none, s:palette.none, 'undercurl', s:palette.green)
+    call edge#highlight('DiagnosticHint', s:palette.green, s:palette.none)
+    call edge#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.none, 'undercurl', s:palette.green)
   endif
   highlight! link DiagnosticFloatingError ErrorFloat
   highlight! link DiagnosticFloatingWarn WarningFloat
   highlight! link DiagnosticFloatingInfo InfoFloat
   highlight! link DiagnosticFloatingHint HintFloat
-  highlight! link DiagnosticFloatingOk OkFloat
   highlight! link DiagnosticVirtualTextError VirtualTextError
   highlight! link DiagnosticVirtualTextWarn VirtualTextWarning
   highlight! link DiagnosticVirtualTextInfo VirtualTextInfo
   highlight! link DiagnosticVirtualTextHint VirtualTextHint
-  highlight! link DiagnosticVirtualTextOk VirtualTextOk
   highlight! link DiagnosticSignError RedSign
   highlight! link DiagnosticSignWarn YellowSign
   highlight! link DiagnosticSignInfo BlueSign
-  highlight! link DiagnosticSignHint PurpleSign
-  highlight! link DiagnosticSignOk GreenSign
+  highlight! link DiagnosticSignHint GreenSign
   highlight! link LspDiagnosticsFloatingError DiagnosticFloatingError
   highlight! link LspDiagnosticsFloatingWarning DiagnosticFloatingWarn
   highlight! link LspDiagnosticsFloatingInformation DiagnosticFloatingInfo
@@ -351,21 +334,21 @@ highlight! link Added Green
 highlight! link Removed Red
 highlight! link Changed Blue
 if s:configuration.diagnostic_text_highlight
-  call edge#highlight('ErrorText', s:palette.none, s:palette.bg_red, 'undercurl', s:palette.red)
-  call edge#highlight('WarningText', s:palette.none, s:palette.bg_yellow, 'undercurl', s:palette.yellow)
-  call edge#highlight('InfoText', s:palette.none, s:palette.bg_blue, 'undercurl', s:palette.blue)
-  call edge#highlight('HintText', s:palette.none, s:palette.bg_purple, 'undercurl', s:palette.purple)
+  call edge#highlight('ErrorText', s:palette.none, s:palette.diff_red, 'undercurl', s:palette.red)
+  call edge#highlight('WarningText', s:palette.none, s:palette.diff_yellow, 'undercurl', s:palette.yellow)
+  call edge#highlight('InfoText', s:palette.none, s:palette.diff_blue, 'undercurl', s:palette.blue)
+  call edge#highlight('HintText', s:palette.none, s:palette.diff_green, 'undercurl', s:palette.green)
 else
   call edge#highlight('ErrorText', s:palette.none, s:palette.none, 'undercurl', s:palette.red)
   call edge#highlight('WarningText', s:palette.none, s:palette.none, 'undercurl', s:palette.yellow)
   call edge#highlight('InfoText', s:palette.none, s:palette.none, 'undercurl', s:palette.blue)
-  call edge#highlight('HintText', s:palette.none, s:palette.none, 'undercurl', s:palette.purple)
+  call edge#highlight('HintText', s:palette.none, s:palette.none, 'undercurl', s:palette.green)
 endif
 if s:configuration.diagnostic_line_highlight
-  call edge#highlight('ErrorLine', s:palette.none, s:palette.bg_red)
-  call edge#highlight('WarningLine', s:palette.none, s:palette.bg_yellow)
-  call edge#highlight('InfoLine', s:palette.none, s:palette.bg_blue)
-  call edge#highlight('HintLine', s:palette.none, s:palette.bg_purple)
+  call edge#highlight('ErrorLine', s:palette.none, s:palette.diff_red)
+  call edge#highlight('WarningLine', s:palette.none, s:palette.diff_yellow)
+  call edge#highlight('InfoLine', s:palette.none, s:palette.diff_blue)
+  call edge#highlight('HintLine', s:palette.none, s:palette.diff_green)
 else
   highlight clear ErrorLine
   highlight clear WarningLine
@@ -377,25 +360,21 @@ if s:configuration.diagnostic_virtual_text ==# 'grey'
   highlight! link VirtualTextError Grey
   highlight! link VirtualTextInfo Grey
   highlight! link VirtualTextHint Grey
-  highlight! link VirtualTextOk Grey
 elseif s:configuration.diagnostic_virtual_text ==# 'colored'
   highlight! link VirtualTextWarning Yellow
   highlight! link VirtualTextError Red
   highlight! link VirtualTextInfo Blue
-  highlight! link VirtualTextHint Purple
-  highlight! link VirtualTextOk Green
+  highlight! link VirtualTextHint Green
 else
-  call edge#highlight('VirtualTextWarning', s:palette.yellow, s:palette.bg_yellow)
-  call edge#highlight('VirtualTextError', s:palette.red, s:palette.bg_red)
-  call edge#highlight('VirtualTextInfo', s:palette.blue, s:palette.bg_blue)
-  call edge#highlight('VirtualTextHint', s:palette.purple, s:palette.bg_purple)
-  call edge#highlight('VirtualTextOk', s:palette.green, s:palette.bg_green)
+  call edge#highlight('VirtualTextWarning', s:palette.yellow, s:palette.diff_yellow)
+  call edge#highlight('VirtualTextError', s:palette.red, s:palette.diff_red)
+  call edge#highlight('VirtualTextInfo', s:palette.blue, s:palette.diff_blue)
+  call edge#highlight('VirtualTextHint', s:palette.green, s:palette.diff_green)
 endif
 call edge#highlight('ErrorFloat', s:palette.red, s:palette.none)
 call edge#highlight('WarningFloat', s:palette.yellow, s:palette.none)
 call edge#highlight('InfoFloat', s:palette.blue, s:palette.none)
-call edge#highlight('HintFloat', s:palette.purple, s:palette.none)
-call edge#highlight('OkFloat', s:palette.green, s:palette.none)
+call edge#highlight('HintFloat', s:palette.green, s:palette.none)
 if &diff
   call edge#highlight('CurrentWord', s:palette.bg0, s:palette.green)
 elseif s:configuration.current_word ==# 'grey background'
@@ -714,16 +693,9 @@ if has('nvim-0.9')
   highlight! link @lsp.type.typeParameter TSTypeDefinition
   highlight! link @lsp.type.variable TSVariable
   call edge#highlight('DiagnosticUnnecessary', s:palette.grey, s:palette.none)
-  call edge#highlight('DiagnosticDeprecated', s:palette.none, s:palette.none, 'strikethrough', s:palette.fg)
 endif
 highlight! link TSModuleInfoGood Green
 highlight! link TSModuleInfoBad Red
-" }}}
-" nvim-treesitter/nvim-treesitter-context {{{
-call edge#highlight('TreesitterContext', s:palette.fg, s:palette.bg2)
-if s:configuration.dim_inactive_windows && !s:configuration.transparent_background
-  call edge#highlight('TreesitterContextLineNumber', s:palette.grey_dim, s:palette.bg0)
-endif
 " }}}
 " github/copilot.vim {{{
 highlight! link CopilotSuggestion Grey
@@ -768,7 +740,7 @@ highlight! link CocHoverRange CurrentWord
 highlight! link CocErrorSign RedSign
 highlight! link CocWarningSign YellowSign
 highlight! link CocInfoSign BlueSign
-highlight! link CocHintSign PurpleSign
+highlight! link CocHintSign GreenSign
 highlight! link CocWarningVirtualText VirtualTextWarning
 highlight! link CocErrorVirtualText VirtualTextError
 highlight! link CocInfoVirtualText VirtualTextInfo
@@ -791,7 +763,6 @@ highlight! link CocGitChangeRemovedSign PurpleSign
 highlight! link CocGitChangedSign BlueSign
 highlight! link CocGitRemovedSign RedSign
 highlight! link CocGitTopRemovedSign RedSign
-highlight! link CocInlineVirtualText Grey
 " }}}
 " prabirshrestha/vim-lsp {{{
 highlight! link LspErrorVirtualText VirtualTextError
@@ -834,7 +805,7 @@ highlight! link LspDiagInlineHint HintText
 highlight! link LspDiagSignErrorText RedSign
 highlight! link LspDiagSignWarningText YellowSign
 highlight! link LspDiagSignInfoText BlueSign
-highlight! link LspDiagSignHintText PurpleSign
+highlight! link LspDiagSignHintText GreenSign
 highlight! link LspDiagVirtualTextError VirtualTextError
 highlight! link LspDiagVirtualTextWarning VirtualTextWarning
 highlight! link LspDiagVirtualTextInfo VirtualTextInfo
@@ -1047,7 +1018,7 @@ highlight! link EasyMotionTarget Search
 highlight! link EasyMotionShade Grey
 " }}}
 " justinmk/vim-sneak {{{
-call edge#highlight('SneakLabelMask', s:palette.filled_purple, s:palette.filled_purple)
+call edge#highlight('SneakLabelMask', s:palette.bg_purple, s:palette.bg_purple)
 highlight! link Sneak Search
 highlight! link SneakLabel Search
 highlight! link SneakScope DiffText
@@ -1243,11 +1214,8 @@ highlight! link RainbowDelimiterViolet Purple
 call edge#highlight('BufferCurrent', s:palette.fg, s:palette.bg0)
 call edge#highlight('BufferCurrentIndex', s:palette.fg, s:palette.bg0)
 call edge#highlight('BufferCurrentMod', s:palette.blue, s:palette.bg0)
-call edge#highlight('BufferCurrentTarget', s:palette.red, s:palette.bg0, 'bold')
 call edge#highlight('BufferCurrentSign', s:palette.purple, s:palette.bg0)
-call edge#highlight('BufferCurrentADDED', s:palette.green, s:palette.bg0)
-call edge#highlight('BufferCurrentDELETED', s:palette.red, s:palette.bg0)
-call edge#highlight('BufferCurrentCHANGED', s:palette.blue, s:palette.bg0)
+call edge#highlight('BufferCurrentTarget', s:palette.red, s:palette.bg0, 'bold')
 call edge#highlight('BufferVisible', s:palette.fg, s:palette.bg_dim)
 call edge#highlight('BufferVisibleIndex', s:palette.fg, s:palette.bg_dim)
 call edge#highlight('BufferVisibleMod', s:palette.blue, s:palette.bg_dim)
@@ -1256,13 +1224,9 @@ call edge#highlight('BufferVisibleTarget', s:palette.yellow, s:palette.bg_dim, '
 call edge#highlight('BufferInactive', s:palette.grey, s:palette.bg_dim)
 call edge#highlight('BufferInactiveIndex', s:palette.grey, s:palette.bg_dim)
 call edge#highlight('BufferInactiveMod', s:palette.grey, s:palette.bg_dim)
-call edge#highlight('BufferInactiveTarget', s:palette.yellow, s:palette.bg_dim, 'bold')
 call edge#highlight('BufferInactiveSign', s:palette.grey_dim, s:palette.bg_dim)
-highlight! link BufferInactiveADDED BufferInactiveSign
-highlight! link BufferInactiveDELETED BufferInactiveSign
-highlight! link BufferInactiveCHANGED BufferInactiveSign
+call edge#highlight('BufferInactiveTarget', s:palette.yellow, s:palette.bg_dim, 'bold')
 call edge#highlight('BufferTabpages', s:palette.grey, s:palette.bg_dim, 'bold')
-call edge#highlight('BufferTabpagesSep', s:palette.grey_dim, s:palette.bg_dim, 'bold')
 call edge#highlight('BufferTabpageFill', s:palette.bg_dim, s:palette.bg_dim)
 " }}}
 " rcarriga/nvim-notify {{{
@@ -1308,7 +1272,7 @@ call edge#highlight('DefinitionPreviewTitle', s:palette.purple, s:palette.none, 
 highlight! link LspSagaDiagnosticError Red
 highlight! link LspSagaDiagnosticWarn Yellow
 highlight! link LspSagaDiagnosticInfo Blue
-highlight! link LspSagaDiagnosticHint Purple
+highlight! link LspSagaDiagnosticHint Green
 highlight! link LspSagaErrorTrunCateLine LspSagaDiagnosticError
 highlight! link LspSagaWarnTrunCateLine LspSagaDiagnosticWarn
 highlight! link LspSagaInfoTrunCateLine LspSagaDiagnosticInfo
@@ -1341,16 +1305,11 @@ call edge#highlight('InclineNormalNC', s:palette.grey, s:palette.bg2)
 " }}}
 " echasnovski/mini.nvim {{{
 call edge#highlight('MiniAnimateCursor', s:palette.none, s:palette.none, 'reverse,nocombine')
+call edge#highlight('MiniFilesFile', s:palette.fg, s:palette.none)
 if s:configuration.float_style ==# 'dim'
-  call edge#highlight('MiniFilesTitle', s:palette.grey, s:palette.bg0)
-elseif s:configuration.float_style ==# 'blend'
-  if s:configuration.transparent_background
-    highlight! link MiniFilesTitle Grey
-  else
-    call edge#highlight('MiniFilesTitle', s:palette.grey, s:palette.bg1)
-  endif
+  call edge#highlight('MiniFilesTitleFocused', s:palette.green, s:palette.bg_dim, 'bold')
 else
-  call edge#highlight('MiniFilesTitle', s:palette.grey, s:palette.bg4)
+  call edge#highlight('MiniFilesTitleFocused', s:palette.green, s:palette.bg2, 'bold')
 endif
 call edge#highlight('MiniHipatternsFixme', s:palette.bg0, s:palette.red, 'bold')
 call edge#highlight('MiniHipatternsHack', s:palette.bg0, s:palette.yellow, 'bold')
@@ -1369,33 +1328,22 @@ call edge#highlight('MiniIndentscopePrefix', s:palette.none, s:palette.none, 'no
 call edge#highlight('MiniJump2dSpot', s:palette.purple, s:palette.none, 'bold,nocombine')
 call edge#highlight('MiniJump2dSpotAhead', s:palette.cyan, s:palette.none, 'nocombine')
 call edge#highlight('MiniJump2dSpotUnique', s:palette.yellow, s:palette.none, 'bold,nocombine')
-highlight! link MiniPickPrompt NormalFloat
 if s:configuration.float_style ==# 'dim'
-  call edge#highlight('MiniPickPromptPrefix', s:palette.purple, s:palette.bg_dim)
-  call edge#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg_dim)
-elseif s:configuration.float_style ==# 'blend'
-  if s:configuration.transparent_background
-    highlight! link MiniPickPromptPrefix Purple
-    highlight! link MiniPickPromptCaret Blue
-  else
-    call edge#highlight('MiniPickPromptPrefix', s:palette.purple, s:palette.bg0)
-    call edge#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg0)
-  endif
+  call edge#highlight('MiniPickPrompt', s:palette.blue, s:palette.bg_dim)
 else
-  call edge#highlight('MiniPickPromptPrefix', s:palette.purple, s:palette.bg2)
-  call edge#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg2)
+  call edge#highlight('MiniPickPrompt', s:palette.blue, s:palette.bg2)
 endif
 call edge#highlight('MiniStarterCurrent', s:palette.none, s:palette.none, 'nocombine')
 call edge#highlight('MiniStatuslineDevinfo', s:palette.fg, s:palette.bg2)
 call edge#highlight('MiniStatuslineFileinfo', s:palette.fg, s:palette.bg2)
 call edge#highlight('MiniStatuslineFilename', s:palette.grey, s:palette.bg1)
 call edge#highlight('MiniStatuslineInactive', s:palette.grey, s:palette.bg1)
-call edge#highlight('MiniStatuslineModeCommand', s:palette.bg0, s:palette.filled_green, 'bold')
-call edge#highlight('MiniStatuslineModeInsert', s:palette.bg0, s:palette.filled_blue, 'bold')
-call edge#highlight('MiniStatuslineModeNormal', s:palette.bg0, s:palette.filled_purple, 'bold')
+call edge#highlight('MiniStatuslineModeCommand', s:palette.bg0, s:palette.bg_green, 'bold')
+call edge#highlight('MiniStatuslineModeInsert', s:palette.bg0, s:palette.bg_blue, 'bold')
+call edge#highlight('MiniStatuslineModeNormal', s:palette.bg0, s:palette.bg_purple, 'bold')
 call edge#highlight('MiniStatuslineModeOther', s:palette.bg0, s:palette.cyan, 'bold')
 call edge#highlight('MiniStatuslineModeReplace', s:palette.bg0, s:palette.yellow, 'bold')
-call edge#highlight('MiniStatuslineModeVisual', s:palette.bg0, s:palette.filled_red, 'bold')
+call edge#highlight('MiniStatuslineModeVisual', s:palette.bg0, s:palette.bg_red, 'bold')
 call edge#highlight('MiniTablineCurrent', s:palette.fg, s:palette.bg4)
 call edge#highlight('MiniTablineHidden', s:palette.grey, s:palette.bg2)
 call edge#highlight('MiniTablineModifiedCurrent', s:palette.blue, s:palette.bg4)
@@ -1435,6 +1383,12 @@ highlight! link MiniDiffOverDelete DiffDelete
 highlight! link MiniDiffSignAdd GreenSign
 highlight! link MiniDiffSignChange BlueSign
 highlight! link MiniDiffSignDelete RedSign
+highlight! link MiniFilesBorder FloatBorder
+highlight! link MiniFilesBorderModified DiagnosticFloatingWarn
+highlight! link MiniFilesCursorLine CursorLine
+highlight! link MiniFilesDirectory Directory
+highlight! link MiniFilesNormal NormalFloat
+highlight! link MiniFilesTitle FloatTitle
 highlight! link MiniIndentscopeSymbol Grey
 highlight! link MiniJump Search
 highlight! link MiniJump2dDim Comment
@@ -1446,7 +1400,18 @@ highlight! link MiniNotifyBorder FloatBorder
 highlight! link MiniNotifyNormal NormalFloat
 highlight! link MiniNotifyTitle FloatTitle
 highlight! link MiniOperatorsExchangeFrom IncSearch
+highlight! link MiniPickBorder FloatBorder
+highlight! link MiniPickBorderBusy DiagnosticFloatingWarn
+highlight! link MiniPickBorderText FloatTitle
+highlight! link MiniPickHeader DiagnosticFloatingHint
+highlight! link MiniPickIconDirectory Directory
+highlight! link MiniPickIconFile MiniPickNormal
+highlight! link MiniPickMatchCurrent CursorLine
 highlight! link MiniPickMatchMarked DiffChange
+highlight! link MiniPickMatchRanges DiagnosticFloatingHint
+highlight! link MiniPickNormal NormalFloat
+highlight! link MiniPickPreviewLine CursorLine
+highlight! link MiniPickPreviewRegion IncSearch
 highlight! link MiniStarterFooter Red
 highlight! link MiniStarterHeader Purple
 highlight! link MiniStarterInactive Comment
@@ -1660,20 +1625,21 @@ highlight! link NvimTreeFolderIcon Blue
 highlight! link NvimTreeEmptyFolderName Green
 highlight! link NvimTreeOpenedFolderName Green
 highlight! link NvimTreeExecFile Fg
-highlight! link NvimTreeOpenedHL Fg
+highlight! link NvimTreeOpenedFile Fg
 highlight! link NvimTreeSpecialFile Fg
 highlight! link NvimTreeImageFile Fg
+highlight! link NvimTreeMarkdownFile Fg
 highlight! link NvimTreeIndentMarker Grey
-highlight! link NvimTreeGitDirtyIcon Yellow
-highlight! link NvimTreeGitStagedIcon Blue
-highlight! link NvimTreeGitMergeIcon Cyan
-highlight! link NvimTreeGitRenamedIcon Purple
-highlight! link NvimTreeGitNewIcon Green
-highlight! link NvimTreeGitDeletedIcon Red
+highlight! link NvimTreeGitDirty Yellow
+highlight! link NvimTreeGitStaged Blue
+highlight! link NvimTreeGitMerge Cyan
+highlight! link NvimTreeGitRenamed Purple
+highlight! link NvimTreeGitNew Green
+highlight! link NvimTreeGitDeleted Red
 highlight! link NvimTreeLspDiagnosticsError RedSign
 highlight! link NvimTreeLspDiagnosticsWarning YellowSign
 highlight! link NvimTreeLspDiagnosticsInformation BlueSign
-highlight! link NvimTreeLspDiagnosticsHint PurpleSign
+highlight! link NvimTreeLspDiagnosticsHint GreenSign
 " syn_end }}}
 " syn_begin: fern {{{
 " https://github.com/lambdalisue/fern.vim

@@ -7,12 +7,6 @@
 " =============================================================================
 
 function! everforest#get_configuration() "{{{
-  let float_style = get(g:, 'everforest_float_style', 'bright')
-  if float_style ==# 'none'
-    let float_style = 'blend'
-    echoerr "g:everforest_float_style='none' was renamed to 'blend'"
-  endif
-
   return {
         \ 'background': get(g:, 'everforest_background', 'medium'),
         \ 'transparent_background': get(g:, 'everforest_transparent_background', 0),
@@ -24,7 +18,7 @@ function! everforest#get_configuration() "{{{
         \ 'spell_foreground': get(g:, 'everforest_spell_foreground', 'none'),
         \ 'ui_contrast': get(g:, 'everforest_ui_contrast', 'low'),
         \ 'show_eob': get(g:, 'everforest_show_eob', 1),
-        \ 'float_style': float_style,
+        \ 'float_style': get(g:, 'everforest_float_style', 'bright'),
         \ 'current_word': get(g:, 'everforest_current_word', get(g:, 'everforest_transparent_background', 0) == 0 ? 'grey background' : 'bold'),
         \ 'inlay_hints_background': get(g:, 'everforest_inlay_hints_background', 'none'),
         \ 'lightline_disable_bold': get(g:, 'everforest_lightline_disable_bold', 0),
@@ -49,10 +43,9 @@ function! everforest#get_palette(background, colors_override) "{{{
             \ 'bg5':        ['#4f5b58',   '240'],
             \ 'bg_visual':  ['#4c3743',   '52'],
             \ 'bg_red':     ['#493b40',   '52'],
-            \ 'bg_yellow':  ['#45443c',   '136'],
             \ 'bg_green':   ['#3c4841',   '22'],
             \ 'bg_blue':    ['#384b55',   '17'],
-            \ 'bg_purple':  ['#463f48',   '54'],
+            \ 'bg_yellow':  ['#45443c',   '136'],
             \ }
     else
       let palette1 = {
@@ -65,10 +58,9 @@ function! everforest#get_palette(background, colors_override) "{{{
             \ 'bg5':        ['#bec5b2',   '223'],
             \ 'bg_visual':  ['#f0f2d4',   '194'],
             \ 'bg_red':     ['#ffe7de',   '217'],
-            \ 'bg_yellow':  ['#fef2d5',   '226'],
             \ 'bg_green':   ['#f3f5d9',   '194'],
             \ 'bg_blue':    ['#ecf5ed',   '117'],
-            \ 'bg_purple':  ['#fceced',   '189'],
+            \ 'bg_yellow':  ['#fef2d5',   '226'],
             \ }
     endif "}}}
   elseif a:background ==# 'medium' "{{{
@@ -83,10 +75,9 @@ function! everforest#get_palette(background, colors_override) "{{{
             \ 'bg5':        ['#56635f',   '240'],
             \ 'bg_visual':  ['#543a48',   '52'],
             \ 'bg_red':     ['#514045',   '52'],
-            \ 'bg_yellow':  ['#4d4c43',   '136'],
             \ 'bg_green':   ['#425047',   '22'],
             \ 'bg_blue':    ['#3a515d',   '17'],
-            \ 'bg_purple':  ['#4a444e',   '54'],
+            \ 'bg_yellow':  ['#4d4c43',   '136'],
             \ }
     else
       let palette1 = {
@@ -98,11 +89,10 @@ function! everforest#get_palette(background, colors_override) "{{{
             \ 'bg4':        ['#e0dcc7',   '223'],
             \ 'bg5':        ['#bdc3af',   '223'],
             \ 'bg_visual':  ['#eaedc8',   '194'],
-            \ 'bg_red':     ['#fde3da',   '217'],
-            \ 'bg_yellow':  ['#faedcd',   '226'],
+            \ 'bg_red':     ['#fbe3da',   '217'],
             \ 'bg_green':   ['#f0f1d2',   '194'],
             \ 'bg_blue':    ['#e9f0e9',   '117'],
-            \ 'bg_purple':  ['#fae8e2',   '189'],
+            \ 'bg_yellow':  ['#faedcd',   '226'],
             \ }
     endif "}}}
   else "{{{
@@ -117,10 +107,9 @@ function! everforest#get_palette(background, colors_override) "{{{
             \ 'bg5':        ['#5d6b66',   '240'],
             \ 'bg_visual':  ['#5c3f4f',   '52'],
             \ 'bg_red':     ['#59464c',   '52'],
-            \ 'bg_yellow':  ['#55544a',   '136'],
             \ 'bg_green':   ['#48584e',   '22'],
             \ 'bg_blue':    ['#3f5865',   '17'],
-            \ 'bg_purple':  ['#4e4953',   '54'],
+            \ 'bg_yellow':  ['#55544a',   '136'],
             \ }
     else
       let palette1 = {
@@ -132,11 +121,10 @@ function! everforest#get_palette(background, colors_override) "{{{
             \ 'bg4':        ['#d8d3ba',   '223'],
             \ 'bg5':        ['#b9c0ab',   '223'],
             \ 'bg_visual':  ['#e1e4bd',   '194'],
-            \ 'bg_red':     ['#fadbd0',   '217'],
-            \ 'bg_yellow':  ['#f1e4c5',   '226'],
+            \ 'bg_red':     ['#f4dbd0',   '217'],
             \ 'bg_green':   ['#e5e6c5',   '194'],
             \ 'bg_blue':    ['#e1e7dd',   '117'],
-            \ 'bg_purple':  ['#f1ddd4',   '189'],
+            \ 'bg_yellow':  ['#f1e4c5',   '226'],
             \ }
     endif
   endif "}}}
