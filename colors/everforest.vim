@@ -10,7 +10,7 @@
 let s:configuration = everforest#get_configuration()
 let s:palette = everforest#get_palette(s:configuration.background, s:configuration.colors_override)
 let s:path = expand('<sfile>:p') " the path of this script
-let s:last_modified = 'Wed Feb 26 08:07:31 UTC 2025'
+let s:last_modified = 'Wed Nov 12 18:36:58 UTC 2025'
 let g:everforest_loaded_file_types = []
 
 if !(exists('g:colors_name') && g:colors_name ==# 'everforest' && s:configuration.better_performance)
@@ -22,13 +22,13 @@ endif
 
 let g:colors_name = 'everforest'
 
-if !(has('termguicolors') && &termguicolors) && !has('gui_running') && &t_Co != 256
+if !(has('termguicolors') && &termguicolors) && !has('gui_running') && &t_Co < 256
   finish
 endif
 " }}}
 " Common Highlight Groups: {{{
 " UI: {{{
-if s:configuration.transparent_background >= 1
+if s:configuration.transparent_background
   call everforest#highlight('Normal', s:palette.fg, s:palette.none)
   call everforest#highlight('NormalNC', s:palette.fg, s:palette.none)
   call everforest#highlight('Terminal', s:palette.fg, s:palette.none)
@@ -60,7 +60,7 @@ else
   endif
   call everforest#highlight('Folded', s:palette.grey1, s:palette.bg1)
   call everforest#highlight('ToolbarLine', s:palette.fg, s:palette.bg2)
-  if s:configuration.sign_column_background ==# 'grey'
+  if s:configuration.sign_column_background ==# 'grey' || s:configuration.sign_column_background ==# 'linenr'
     call everforest#highlight('SignColumn', s:palette.fg, s:palette.bg1)
     call everforest#highlight('FoldColumn', s:palette.grey2, s:palette.bg1)
   else
@@ -103,22 +103,44 @@ else
   call everforest#highlight('CursorColumn', s:palette.none, s:palette.bg1)
 endif
 if s:configuration.ui_contrast ==# 'low'
-  call everforest#highlight('LineNr', s:palette.bg5, s:palette.none)
-  if &diff
-    call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.none, 'underline')
-  elseif (&relativenumber == 1 && &cursorline == 0) || s:configuration.sign_column_background ==# 'none'
-    call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.none)
+  if s:configuration.sign_column_background ==# 'linenr' && !s:configuration.transparent_background
+    call everforest#highlight('LineNr', s:palette.bg5, s:palette.bg1)
+    if &diff
+      call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.bg1, 'underline')
+    elseif (&relativenumber == 1 && &cursorline == 0)
+      call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.bg1)
+    else
+      call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.bg1)
+    endif
   else
-    call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.bg1)
+    call everforest#highlight('LineNr', s:palette.bg5, s:palette.none)
+    if &diff
+      call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.none, 'underline')
+    elseif (&relativenumber == 1 && &cursorline == 0) || s:configuration.sign_column_background ==# 'none'
+      call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.none)
+    else
+      call everforest#highlight('CursorLineNr', s:palette.grey1, s:palette.bg1)
+    endif
   endif
 else
-  call everforest#highlight('LineNr', s:palette.grey0, s:palette.none)
-  if &diff
-    call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.none, 'underline')
-  elseif (&relativenumber == 1 && &cursorline == 0) || s:configuration.sign_column_background ==# 'none'
-    call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.none)
+  if s:configuration.sign_column_background ==# 'linenr' && !s:configuration.transparent_background
+    call everforest#highlight('LineNr', s:palette.grey0, s:palette.bg1)
+    if &diff
+      call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.none, 'underline')
+    elseif (&relativenumber == 1 && &cursorline == 0)
+      call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.none)
+    else
+      call everforest#highlight('CursorLineNr', s:palette.fg, s:palette.bg1)
+    endif
   else
-    call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.bg1)
+    call everforest#highlight('LineNr', s:palette.grey0, s:palette.none)
+    if &diff
+      call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.none, 'underline')
+    elseif (&relativenumber == 1 && &cursorline == 0) || s:configuration.sign_column_background ==# 'none'
+      call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.none)
+    else
+      call everforest#highlight('CursorLineNr', s:palette.grey2, s:palette.bg1)
+    endif
   endif
 endif
 call everforest#highlight('DiffAdd', s:palette.none, s:palette.bg_green)
@@ -132,6 +154,7 @@ endif
 call everforest#highlight('Directory', s:palette.green, s:palette.none)
 call everforest#highlight('ErrorMsg', s:palette.red, s:palette.none, 'bold,underline')
 call everforest#highlight('WarningMsg', s:palette.yellow, s:palette.none, 'bold')
+highlight! link OkMsg Green
 call everforest#highlight('ModeMsg', s:palette.fg, s:palette.none, 'bold')
 call everforest#highlight('MoreMsg', s:palette.yellow, s:palette.none, 'bold')
 call everforest#highlight('MatchParen', s:palette.none, s:palette.bg4)
@@ -152,11 +175,21 @@ call everforest#highlight('PmenuThumb', s:palette.none, s:palette.grey0)
 if s:configuration.float_style ==# 'dim'
   call everforest#highlight('NormalFloat', s:palette.fg, s:palette.bg_dim)
   call everforest#highlight('FloatBorder', s:palette.grey1, s:palette.bg_dim)
-  call everforest#highlight('FloatTitle', s:palette.fg, s:palette.bg_dim, 'bold')
+  call everforest#highlight('FloatTitle', s:palette.fg, s:palette.bg0, 'bold')
+elseif s:configuration.float_style ==# 'blend'
+  if s:configuration.transparent_background
+    highlight! link NormalFloat Normal
+    highlight! link FloatBorder Grey
+    call everforest#highlight('FloatTitle', s:palette.fg, s:palette.none, 'bold')
+  else
+    call everforest#highlight('NormalFloat', s:palette.fg, s:palette.bg0)
+    call everforest#highlight('FloatBorder', s:palette.grey1, s:palette.bg0)
+    call everforest#highlight('FloatTitle', s:palette.fg, s:palette.bg1, 'bold')
+  endif
 else
   call everforest#highlight('NormalFloat', s:palette.fg, s:palette.bg2)
   call everforest#highlight('FloatBorder', s:palette.grey1, s:palette.bg2)
-  call everforest#highlight('FloatTitle', s:palette.fg, s:palette.bg2, 'bold')
+  call everforest#highlight('FloatTitle', s:palette.fg, s:palette.bg4, 'bold')
 endif
 call everforest#highlight('Question', s:palette.yellow, s:palette.none)
 if s:configuration.spell_foreground ==# 'none'
@@ -217,8 +250,10 @@ if has('nvim')
     call everforest#highlight('DiagnosticUnderlineWarn', s:palette.none, s:palette.bg_yellow, 'undercurl', s:palette.yellow)
     call everforest#highlight('DiagnosticInfo', s:palette.blue, s:palette.bg_blue)
     call everforest#highlight('DiagnosticUnderlineInfo', s:palette.none, s:palette.bg_blue, 'undercurl', s:palette.blue)
-    call everforest#highlight('DiagnosticHint', s:palette.green, s:palette.bg_green)
-    call everforest#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.bg_green, 'undercurl', s:palette.green)
+    call everforest#highlight('DiagnosticHint', s:palette.purple, s:palette.bg_purple)
+    call everforest#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.bg_purple, 'undercurl', s:palette.purple)
+    call everforest#highlight('DiagnosticOk', s:palette.green, s:palette.bg_green)
+    call everforest#highlight('DiagnosticUnderlineOk', s:palette.none, s:palette.bg_green, 'undercurl', s:palette.green)
   else
     call everforest#highlight('DiagnosticError', s:palette.red, s:palette.none)
     call everforest#highlight('DiagnosticUnderlineError', s:palette.none, s:palette.none, 'undercurl', s:palette.red)
@@ -226,21 +261,26 @@ if has('nvim')
     call everforest#highlight('DiagnosticUnderlineWarn', s:palette.none, s:palette.none, 'undercurl', s:palette.yellow)
     call everforest#highlight('DiagnosticInfo', s:palette.blue, s:palette.none)
     call everforest#highlight('DiagnosticUnderlineInfo', s:palette.none, s:palette.none, 'undercurl', s:palette.blue)
-    call everforest#highlight('DiagnosticHint', s:palette.green, s:palette.none)
-    call everforest#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.none, 'undercurl', s:palette.green)
+    call everforest#highlight('DiagnosticHint', s:palette.purple, s:palette.none)
+    call everforest#highlight('DiagnosticUnderlineHint', s:palette.none, s:palette.none, 'undercurl', s:palette.purple)
+    call everforest#highlight('DiagnosticOk', s:palette.green, s:palette.none)
+    call everforest#highlight('DiagnosticUnderlineOk', s:palette.none, s:palette.none, 'undercurl', s:palette.green)
   endif
   highlight! link DiagnosticFloatingError ErrorFloat
   highlight! link DiagnosticFloatingWarn WarningFloat
   highlight! link DiagnosticFloatingInfo InfoFloat
   highlight! link DiagnosticFloatingHint HintFloat
+  highlight! link DiagnosticFloatingOk OkFloat
   highlight! link DiagnosticVirtualTextError VirtualTextError
   highlight! link DiagnosticVirtualTextWarn VirtualTextWarning
   highlight! link DiagnosticVirtualTextInfo VirtualTextInfo
   highlight! link DiagnosticVirtualTextHint VirtualTextHint
+  highlight! link DiagnosticVirtualTextOk VirtualTextOk
   highlight! link DiagnosticSignError RedSign
   highlight! link DiagnosticSignWarn YellowSign
   highlight! link DiagnosticSignInfo BlueSign
-  highlight! link DiagnosticSignHint GreenSign
+  highlight! link DiagnosticSignHint PurpleSign
+  highlight! link DiagnosticSignOk GreenSign
   highlight! link LspDiagnosticsFloatingError DiagnosticFloatingError
   highlight! link LspDiagnosticsFloatingWarning DiagnosticFloatingWarn
   highlight! link LspDiagnosticsFloatingInformation DiagnosticFloatingInfo
@@ -380,18 +420,18 @@ if s:configuration.diagnostic_text_highlight
   call everforest#highlight('ErrorText', s:palette.none, s:palette.bg_red, 'undercurl', s:palette.red)
   call everforest#highlight('WarningText', s:palette.none, s:palette.bg_yellow, 'undercurl', s:palette.yellow)
   call everforest#highlight('InfoText', s:palette.none, s:palette.bg_blue, 'undercurl', s:palette.blue)
-  call everforest#highlight('HintText', s:palette.none, s:palette.bg_green, 'undercurl', s:palette.green)
+  call everforest#highlight('HintText', s:palette.none, s:palette.bg_purple, 'undercurl', s:palette.purple)
 else
   call everforest#highlight('ErrorText', s:palette.none, s:palette.none, 'undercurl', s:palette.red)
   call everforest#highlight('WarningText', s:palette.none, s:palette.none, 'undercurl', s:palette.yellow)
   call everforest#highlight('InfoText', s:palette.none, s:palette.none, 'undercurl', s:palette.blue)
-  call everforest#highlight('HintText', s:palette.none, s:palette.none, 'undercurl', s:palette.green)
+  call everforest#highlight('HintText', s:palette.none, s:palette.none, 'undercurl', s:palette.purple)
 endif
 if s:configuration.diagnostic_line_highlight
   call everforest#highlight('ErrorLine', s:palette.none, s:palette.bg_red)
   call everforest#highlight('WarningLine', s:palette.none, s:palette.bg_yellow)
   call everforest#highlight('InfoLine', s:palette.none, s:palette.bg_blue)
-  call everforest#highlight('HintLine', s:palette.none, s:palette.bg_green)
+  call everforest#highlight('HintLine', s:palette.none, s:palette.bg_purple)
 else
   highlight clear ErrorLine
   highlight clear WarningLine
@@ -403,21 +443,25 @@ if s:configuration.diagnostic_virtual_text ==# 'grey'
   highlight! link VirtualTextError Grey
   highlight! link VirtualTextInfo Grey
   highlight! link VirtualTextHint Grey
+  highlight! link VirtualTextOk Grey
 elseif s:configuration.diagnostic_virtual_text ==# 'colored'
   highlight! link VirtualTextWarning Yellow
   highlight! link VirtualTextError Red
   highlight! link VirtualTextInfo Blue
-  highlight! link VirtualTextHint Green
+  highlight! link VirtualTextHint Purple
+  highlight! link VirtualTextOk Green
 else
   call everforest#highlight('VirtualTextWarning', s:palette.yellow, s:palette.bg_yellow)
   call everforest#highlight('VirtualTextError', s:palette.red, s:palette.bg_red)
   call everforest#highlight('VirtualTextInfo', s:palette.blue, s:palette.bg_blue)
-  call everforest#highlight('VirtualTextHint', s:palette.green, s:palette.bg_green)
+  call everforest#highlight('VirtualTextHint', s:palette.purple, s:palette.bg_purple)
+  call everforest#highlight('VirtualTextOk', s:palette.green, s:palette.bg_green)
 endif
 call everforest#highlight('ErrorFloat', s:palette.red, s:palette.none)
 call everforest#highlight('WarningFloat', s:palette.yellow, s:palette.none)
 call everforest#highlight('InfoFloat', s:palette.blue, s:palette.none)
-call everforest#highlight('HintFloat', s:palette.green, s:palette.none)
+call everforest#highlight('HintFloat', s:palette.purple, s:palette.none)
+call everforest#highlight('OkFloat', s:palette.green, s:palette.none)
 if &diff
   call everforest#highlight('CurrentWord', s:palette.bg0, s:palette.green)
 elseif s:configuration.current_word ==# 'grey background'
@@ -737,9 +781,20 @@ if has('nvim-0.9')
   highlight! link @lsp.type.typeParameter TSTypeDefinition
   highlight! link @lsp.type.variable TSVariable
   call everforest#highlight('DiagnosticUnnecessary', s:palette.grey1, s:palette.none)
+  call everforest#highlight('DiagnosticDeprecated', s:palette.none, s:palette.none, 'strikethrough', s:palette.fg)
 endif
 highlight! link TSModuleInfoGood Green
 highlight! link TSModuleInfoBad Red
+" }}}
+" nvim-treesitter/nvim-treesitter-context {{{
+call everforest#highlight('TreesitterContext', s:palette.fg, s:palette.bg2)
+if s:configuration.dim_inactive_windows && !s:configuration.transparent_background && s:configuration.sign_column_background !=# 'linenr'
+  if s:configuration.ui_contrast ==# 'low'
+    call everforest#highlight('TreesitterContextLineNumber', s:palette.bg5, s:palette.bg0)
+  else
+    call everforest#highlight('TreesitterContextLineNumber', s:palette.grey0, s:palette.bg0)
+  endif
+endif
 " }}}
 " github/copilot.vim {{{
 highlight! link CopilotSuggestion Grey
@@ -784,7 +839,7 @@ highlight! link CocHoverRange CurrentWord
 highlight! link CocErrorSign RedSign
 highlight! link CocWarningSign YellowSign
 highlight! link CocInfoSign BlueSign
-highlight! link CocHintSign GreenSign
+highlight! link CocHintSign PurpleSign
 highlight! link CocWarningVirtualText VirtualTextWarning
 highlight! link CocErrorVirtualText VirtualTextError
 highlight! link CocInfoVirtualText VirtualTextInfo
@@ -807,6 +862,7 @@ highlight! link CocGitChangeRemovedSign PurpleSign
 highlight! link CocGitChangedSign BlueSign
 highlight! link CocGitRemovedSign RedSign
 highlight! link CocGitTopRemovedSign RedSign
+highlight! link CocInlineVirtualText Grey
 " }}}
 " prabirshrestha/vim-lsp {{{
 highlight! link LspErrorVirtualText VirtualTextError
@@ -849,7 +905,7 @@ highlight! link LspDiagInlineHint HintText
 highlight! link LspDiagSignErrorText RedSign
 highlight! link LspDiagSignWarningText YellowSign
 highlight! link LspDiagSignInfoText BlueSign
-highlight! link LspDiagSignHintText GreenSign
+highlight! link LspDiagSignHintText PurpleSign
 highlight! link LspDiagVirtualTextError VirtualTextError
 highlight! link LspDiagVirtualTextWarning VirtualTextWarning
 highlight! link LspDiagVirtualTextInfo VirtualTextInfo
@@ -1291,8 +1347,11 @@ highlight! link RainbowDelimiterViolet Purple
 call everforest#highlight('BufferCurrent', s:palette.fg, s:palette.bg0)
 call everforest#highlight('BufferCurrentIndex', s:palette.fg, s:palette.bg0)
 call everforest#highlight('BufferCurrentMod', s:palette.blue, s:palette.bg0)
-call everforest#highlight('BufferCurrentSign', s:palette.statusline1, s:palette.bg0)
 call everforest#highlight('BufferCurrentTarget', s:palette.red, s:palette.bg0, 'bold')
+call everforest#highlight('BufferCurrentSign', s:palette.statusline1, s:palette.bg0)
+call everforest#highlight('BufferCurrentADDED', s:palette.green, s:palette.bg0)
+call everforest#highlight('BufferCurrentDELETED', s:palette.red, s:palette.bg0)
+call everforest#highlight('BufferCurrentCHANGED', s:palette.blue, s:palette.bg0)
 call everforest#highlight('BufferVisible', s:palette.fg, s:palette.bg_dim)
 call everforest#highlight('BufferVisibleIndex', s:palette.fg, s:palette.bg_dim)
 call everforest#highlight('BufferVisibleMod', s:palette.blue, s:palette.bg_dim)
@@ -1301,9 +1360,13 @@ call everforest#highlight('BufferVisibleTarget', s:palette.yellow, s:palette.bg_
 call everforest#highlight('BufferInactive', s:palette.grey1, s:palette.bg_dim)
 call everforest#highlight('BufferInactiveIndex', s:palette.grey1, s:palette.bg_dim)
 call everforest#highlight('BufferInactiveMod', s:palette.grey1, s:palette.bg_dim)
-call everforest#highlight('BufferInactiveSign', s:palette.grey0, s:palette.bg_dim)
 call everforest#highlight('BufferInactiveTarget', s:palette.yellow, s:palette.bg_dim, 'bold')
+call everforest#highlight('BufferInactiveSign', s:palette.grey0, s:palette.bg_dim)
+highlight! link BufferInactiveADDED BufferInactiveSign
+highlight! link BufferInactiveDELETED BufferInactiveSign
+highlight! link BufferInactiveCHANGED BufferInactiveSign
 call everforest#highlight('BufferTabpages', s:palette.grey1, s:palette.bg_dim, 'bold')
+call everforest#highlight('BufferTabpagesSep', s:palette.grey0, s:palette.bg_dim, 'bold')
 call everforest#highlight('BufferTabpageFill', s:palette.bg_dim, s:palette.bg_dim)
 " }}}
 " rcarriga/nvim-notify {{{
@@ -1357,7 +1420,7 @@ call everforest#highlight('DefinitionPreviewTitle', s:palette.blue, s:palette.no
 highlight! link LspSagaDiagnosticError Red
 highlight! link LspSagaDiagnosticWarn Yellow
 highlight! link LspSagaDiagnosticInfo Blue
-highlight! link LspSagaDiagnosticHint Green
+highlight! link LspSagaDiagnosticHint Purple
 highlight! link LspSagaErrorTrunCateLine LspSagaDiagnosticError
 highlight! link LspSagaWarnTrunCateLine LspSagaDiagnosticWarn
 highlight! link LspSagaInfoTrunCateLine LspSagaDiagnosticInfo
@@ -1390,11 +1453,16 @@ call everforest#highlight('InclineNormalNC', s:palette.grey1, s:palette.bg2)
 " }}}
 " echasnovski/mini.nvim {{{
 call everforest#highlight('MiniAnimateCursor', s:palette.none, s:palette.none, 'reverse,nocombine')
-call everforest#highlight('MiniFilesFile', s:palette.fg, s:palette.none)
 if s:configuration.float_style ==# 'dim'
-  call everforest#highlight('MiniFilesTitleFocused', s:palette.green, s:palette.bg_dim, 'bold')
+  call everforest#highlight('MiniFilesTitle', s:palette.grey0, s:palette.bg0)
+elseif s:configuration.float_style ==# 'blend'
+  if s:configuration.transparent_background
+    highlight! link MiniFilesTitle Grey
+  else
+    call everforest#highlight('MiniFilesTitle', s:palette.grey1, s:palette.bg1)
+  endif
 else
-  call everforest#highlight('MiniFilesTitleFocused', s:palette.green, s:palette.bg2, 'bold')
+  call everforest#highlight('MiniFilesTitle', s:palette.grey2, s:palette.bg4)
 endif
 call everforest#highlight('MiniHipatternsFixme', s:palette.bg0, s:palette.red, 'bold')
 call everforest#highlight('MiniHipatternsHack', s:palette.bg0, s:palette.yellow, 'bold')
@@ -1413,10 +1481,21 @@ call everforest#highlight('MiniIndentscopePrefix', s:palette.none, s:palette.non
 call everforest#highlight('MiniJump2dSpot', s:palette.orange, s:palette.none, 'bold,nocombine')
 call everforest#highlight('MiniJump2dSpotAhead', s:palette.aqua, s:palette.none, 'nocombine')
 call everforest#highlight('MiniJump2dSpotUnique', s:palette.yellow, s:palette.none, 'bold,nocombine')
+highlight! link MiniPickPrompt NormalFloat
 if s:configuration.float_style ==# 'dim'
-  call everforest#highlight('MiniPickPrompt', s:palette.blue, s:palette.bg_dim)
+  call everforest#highlight('MiniPickPromptPrefix', s:palette.orange, s:palette.bg_dim)
+  call everforest#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg_dim)
+elseif s:configuration.float_style ==# 'blend'
+  if s:configuration.transparent_background
+    highlight! link MiniPickPromptPrefix Orange
+    highlight! link MiniPickPromptCaret Blue
+  else
+    call everforest#highlight('MiniPickPromptPrefix', s:palette.orange, s:palette.bg0)
+    call everforest#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg0)
+  endif
 else
-  call everforest#highlight('MiniPickPrompt', s:palette.blue, s:palette.bg2)
+  call everforest#highlight('MiniPickPromptPrefix', s:palette.orange, s:palette.bg2)
+  call everforest#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg2)
 endif
 call everforest#highlight('MiniStarterCurrent', s:palette.none, s:palette.none, 'nocombine')
 call everforest#highlight('MiniStatuslineDevinfo', s:palette.grey2, s:palette.bg3)
@@ -1466,12 +1545,6 @@ highlight! link MiniDiffOverDelete DiffDelete
 highlight! link MiniDiffSignAdd GreenSign
 highlight! link MiniDiffSignChange BlueSign
 highlight! link MiniDiffSignDelete RedSign
-highlight! link MiniFilesBorder FloatBorder
-highlight! link MiniFilesBorderModified DiagnosticFloatingWarn
-highlight! link MiniFilesCursorLine CursorLine
-highlight! link MiniFilesDirectory Directory
-highlight! link MiniFilesNormal NormalFloat
-highlight! link MiniFilesTitle FloatTitle
 highlight! link MiniIndentscopeSymbol Grey
 highlight! link MiniJump Search
 highlight! link MiniJump2dDim Comment
@@ -1483,18 +1556,6 @@ highlight! link MiniNotifyBorder FloatBorder
 highlight! link MiniNotifyNormal NormalFloat
 highlight! link MiniNotifyTitle FloatTitle
 highlight! link MiniOperatorsExchangeFrom IncSearch
-highlight! link MiniPickBorder FloatBorder
-highlight! link MiniPickBorderBusy DiagnosticFloatingWarn
-highlight! link MiniPickBorderText FloatTitle
-highlight! link MiniPickHeader DiagnosticFloatingHint
-highlight! link MiniPickIconDirectory Directory
-highlight! link MiniPickIconFile MiniPickNormal
-highlight! link MiniPickMatchCurrent CursorLine
-highlight! link MiniPickMatchMarked Visual
-highlight! link MiniPickMatchRanges DiagnosticFloatingHint
-highlight! link MiniPickNormal NormalFloat
-highlight! link MiniPickPreviewLine CursorLine
-highlight! link MiniPickPreviewRegion IncSearch
 highlight! link MiniStarterFooter Orange
 highlight! link MiniStarterHeader Yellow
 highlight! link MiniStarterInactive Comment
@@ -1717,21 +1778,20 @@ highlight! link NvimTreeFolderIcon Orange
 highlight! link NvimTreeEmptyFolderName Green
 highlight! link NvimTreeOpenedFolderName Green
 highlight! link NvimTreeExecFile Fg
-highlight! link NvimTreeOpenedFile Fg
+highlight! link NvimTreeOpenedHL Fg
 highlight! link NvimTreeSpecialFile Fg
 highlight! link NvimTreeImageFile Fg
-highlight! link NvimTreeMarkdownFile Fg
 highlight! link NvimTreeIndentMarker Grey
-highlight! link NvimTreeGitDirty Yellow
-highlight! link NvimTreeGitStaged Blue
-highlight! link NvimTreeGitMerge Orange
-highlight! link NvimTreeGitRenamed Purple
-highlight! link NvimTreeGitNew Aqua
-highlight! link NvimTreeGitDeleted Red
+highlight! link NvimTreeGitDirtyIcon Yellow
+highlight! link NvimTreeGitStagedIcon Blue
+highlight! link NvimTreeGitMergeIcon Orange
+highlight! link NvimTreeGitRenamedIcon Purple
+highlight! link NvimTreeGitNewIcon Aqua
+highlight! link NvimTreeGitDeletedIcon Red
 highlight! link NvimTreeLspDiagnosticsError RedSign
 highlight! link NvimTreeLspDiagnosticsWarning YellowSign
 highlight! link NvimTreeLspDiagnosticsInformation BlueSign
-highlight! link NvimTreeLspDiagnosticsHint GreenSign
+highlight! link NvimTreeLspDiagnosticsHint PurpleSign
 " syn_end }}}
 " syn_begin: fern {{{
 " https://github.com/lambdalisue/fern.vim
