@@ -38,6 +38,7 @@ function _main() {
 	_dl nordtheme/vim
 	_dl ayu-theme/ayu-vim
 	_dl junegunn/seoul256.vim
+	_dl romainl/flattened
 
 	chmod -x colors/*vim
 }
