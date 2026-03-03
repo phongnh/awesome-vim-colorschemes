@@ -46,7 +46,7 @@ If you want to stay on nvim 0.7, pin catppuccin tag to v0.2.4 and nvim-treesitte
 
 		-- Types
 		["@type"] = { link = "Type" }, -- For types.
-		["@type.builtin"] = { fg = C.mauve, style = O.styles.properties or { "italic" } }, -- For builtin types.
+		["@type.builtin"] = { fg = C.mauve, style = O.styles.types or {} }, -- For builtin types.
 		["@type.definition"] = { link = "Type" }, -- type definitions (e.g. `typedef` in C)
 
 		["@attribute"] = { link = "Constant" }, -- attribute annotations (e.g. Python decorators)
@@ -152,6 +152,15 @@ If you want to stay on nvim 0.7, pin catppuccin tag to v0.2.4 and nvim-treesitte
 		["@markup.heading.4.markdown"] = { link = "rainbow4" },
 		["@markup.heading.5.markdown"] = { link = "rainbow5" },
 		["@markup.heading.6.markdown"] = { link = "rainbow6" },
+
+		-- html
+		["@markup.heading.html"] = { link = "@markup" },
+		["@markup.heading.1.html"] = { link = "@markup" },
+		["@markup.heading.2.html"] = { link = "@markup" },
+		["@markup.heading.3.html"] = { link = "@markup" },
+		["@markup.heading.4.html"] = { link = "@markup" },
+		["@markup.heading.5.html"] = { link = "@markup" },
+		["@markup.heading.6.html"] = { link = "@markup" },
 
 		-- Java
 		["@constant.java"] = { fg = C.teal },

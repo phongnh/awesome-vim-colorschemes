@@ -20,7 +20,7 @@ function! edge#get_configuration() "{{{
         \ 'dim_inactive_windows': get(g:, 'edge_dim_inactive_windows', 0),
         \ 'disable_italic_comment': get(g:, 'edge_disable_italic_comment', 0),
         \ 'enable_italic': get(g:, 'edge_enable_italic', 0),
-        \ 'cursor': get(g:, 'edge_cursor', 'auto'),
+        \ 'cursor': get(g:, 'edge_cursor', ''),
         \ 'menu_selection_background': get(g:, 'edge_menu_selection_background', 'blue'),
         \ 'spell_foreground': get(g:, 'edge_spell_foreground', 'none'),
         \ 'show_eob': get(g:, 'edge_show_eob', 1),

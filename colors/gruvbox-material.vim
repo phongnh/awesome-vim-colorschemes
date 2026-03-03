@@ -10,7 +10,7 @@
 let s:configuration = gruvbox_material#get_configuration()
 let s:palette = gruvbox_material#get_palette(s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
 let s:path = expand('<sfile>:p') " the path of this script
-let s:last_modified = 'Fri Nov  7 20:21:01 UTC 2025'
+let s:last_modified = 'Sun Jan  4 09:52:25 UTC 2026'
 let g:gruvbox_material_loaded_file_types = []
 
 if !(exists('g:colors_name') && g:colors_name ==# 'gruvbox-material' && s:configuration.better_performance)
@@ -88,7 +88,7 @@ else
 endif
 if s:configuration.cursor ==# 'auto'
   call gruvbox_material#highlight('Cursor', s:palette.none, s:palette.none, 'reverse')
-else
+elseif s:configuration.cursor != ''
   call gruvbox_material#highlight('Cursor', s:palette.bg0, s:palette[s:configuration.cursor])
 endif
 highlight! link vCursor Cursor
@@ -1362,6 +1362,14 @@ highlight! link BookmarkSign BlueSign
 highlight! link BookmarkAnnotationSign GreenSign
 highlight! link BookmarkLine DiffChange
 highlight! link BookmarkAnnotationLine DiffAdd
+" }}}
+" ggml-org/llama.vim {{{
+highlight! link llama_hl_fim_hint Grey
+highlight! link llama_hl_fim_info InlayHints
+highlight! link llama_hl_inst_src Visual
+highlight! link llama_hl_inst_virt_proc Grey
+highlight! link llama_hl_inst_virt_gen Grey
+highlight! link llama_hl_inst_virt_ready Grey
 " }}}
 if has('nvim')
 " hrsh7th/nvim-cmp {{{
