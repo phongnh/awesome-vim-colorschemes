@@ -75,11 +75,11 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 ## Usage
 
 ```vim
-colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
+colorscheme catppuccin-nvim " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 ```
 
 ```lua
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "catppuccin-nvim"
 ```
 
 ## Configuration
@@ -160,7 +160,7 @@ require("catppuccin").setup({
 })
 
 -- setup must be called before loading
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "catppuccin-nvim"
 ```
 
 ## Customization
@@ -324,6 +324,22 @@ alpha = true
 </td>
 </tr>
 <!-- alpha.nvim -->
+
+<!-- artio.nvim -->
+</tr>
+<tr
+<tr>
+<td> <a href="https://github.com/comfysage/artio.nvim">artio.nvim</a> </td>
+<td>
+
+```lua
+artio = true
+```
+
+</td>
+
+</tr>
+<!-- artio.nvim -->
 
 <!-- barbar.nvim -->
 </tr>
@@ -1501,7 +1517,7 @@ render_markdown = true
 ```lua
 snacks = {
     enabled = false,
-    indent_scope_color = "", -- catppuccin color (eg. `lavender`) Default: text
+    indent_scope_color = "", -- catppuccin color (eg. `lavender`) Default: overlay2
 }
 ```
 

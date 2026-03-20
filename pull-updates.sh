@@ -3,12 +3,12 @@ set -eu
 shopt -s nocaseglob
 
 function _dl() {
-	local tmp="tmp" docs="docs" rtp=${2:-}
+	local tmp="tmp" docs="docs" rtp=""
 
 	[ -d "$tmp" ] || mkdir "$tmp"
 	[ -d "$docs" ] || mkdir "$docs"
 
-	curl -L "https://api.github.com/repos/$1/tarball" \
+	curl -L "https://api.github.com/repos/$1/tarball${2:+/$2}" \
 		-H "Authorization: token $HOMEBREW_GITHUB_API_TOKEN" \
 		| tar xz --strip=1 -C "$tmp"/
 
