@@ -54,6 +54,7 @@ function _main() {
 	_dl ayu-theme/ayu-vim
 	_dl junegunn/seoul256.vim
 	_dl rose-pine/vim
+	_dl pineapplegiant/spaceduck
 
 	_dl catppuccin/nvim vim
 	_dl EdenEast/nightfox.nvim
