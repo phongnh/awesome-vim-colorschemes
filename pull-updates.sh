@@ -40,6 +40,8 @@ function _dl_codeberg() {
 }
 
 function _main() {
+	_dl_codeberg lifepillar/vim-solarized8 master
+
 	_dl cocopon/iceberg.vim
 	_dl dracula/vim
 	_dl nordtheme/vim
@@ -48,15 +50,14 @@ function _main() {
 	_dl sainnhe/gruvbox-material
 	_dl sainnhe/sonokai
 	_dl whatyouhide/vim-gotham
+	_dl mhartington/oceanic-next
+	_dl ayu-theme/ayu-vim
+	_dl junegunn/seoul256.vim
+	_dl rose-pine/vim
+
 	_dl catppuccin/nvim vim
 	_dl EdenEast/nightfox.nvim
 	_dl zenbones-theme/zenbones.nvim
-	_dl mhartington/oceanic-next
-	_dl nordtheme/vim
-	_dl ayu-theme/ayu-vim
-	_dl junegunn/seoul256.vim
-
-	_dl_codeberg lifepillar/vim-solarized8 master
 
 	chmod -x colors/*vim
 }
