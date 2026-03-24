@@ -55,6 +55,7 @@ function _main() {
 	_dl junegunn/seoul256.vim
 	_dl rose-pine/vim
 	_dl pineapplegiant/spaceduck
+	_dl lanx-x/NeoSolarized
 
 	_dl EdenEast/nightfox.nvim
 	_dl zenbones-theme/zenbones.nvim
