@@ -496,6 +496,7 @@ local function generate(p, opt)
 			CmpItemKind                      { fg = p1.fg4 },
 			CmpItemMenu                      { fg = p1.fg5 },
 
+			BlinkCmpLabelMatch               { fg = p.blossom, gui = "bold" },
 			BlinkCmpLabelDetail              { Type },
 			BlinkCmpLabelDescription         { Type },
 			BlinkCmpSource                   { Type },
@@ -539,6 +540,16 @@ local function generate(p, opt)
 			NotifyDEBUGTitle                 { DiagnosticHint },
 			NotifyTRACEIcon                  { DiagnosticHint },
 			NotifyTRACETitle                 { DiagnosticHint },
+
+			MiniIconsAzure                   { fg = p.water },
+			MiniIconsCyan                    { fg = p.sky },
+			MiniIconsPurple                  { fg = p.blossom },
+			MiniIconsBlue                    { fg = p.sky1 },
+			MiniIconsGreen                   { fg = p.leaf },
+			MiniIconsGrey                    { fg = p1.fg4 },
+			MiniIconsOrange                  { fg = p.wood1 },
+			MiniIconsRed                     { fg = p.rose },
+			MiniIconsYellow                  { fg = p.wood },
 
 			RenderMarkdownCode { bg = LspInlayHint.bg },
 		}

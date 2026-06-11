@@ -10,7 +10,7 @@
 let s:configuration = everforest#get_configuration()
 let s:palette = everforest#get_palette(s:configuration.background, s:configuration.colors_override)
 let s:path = expand('<sfile>:p') " the path of this script
-let s:last_modified = 'Sat Dec 20 09:17:49 UTC 2025'
+let s:last_modified = 'Mon Jun  8 10:03:45 AM UTC 2026'
 let g:everforest_loaded_file_types = []
 
 if !(exists('g:colors_name') && g:colors_name ==# 'everforest' && s:configuration.better_performance)
@@ -165,13 +165,27 @@ if has('nvim')
 else
   call everforest#highlight('SpecialKey', s:palette.bg3, s:palette.none)
 endif
-call everforest#highlight('Pmenu', s:palette.fg, s:palette.bg2)
-call everforest#highlight('PmenuSbar', s:palette.none, s:palette.bg2)
+if s:configuration.pmenu_style ==# 'dim'
+  call everforest#highlight('Pmenu', s:palette.fg, s:palette.bg_dim)
+  call everforest#highlight('PmenuSbar', s:palette.none, s:palette.bg_dim)
+  call everforest#highlight('PmenuThumb', s:palette.none, s:palette.bg2)
+  call everforest#highlight('PmenuKind', s:palette.green, s:palette.bg_dim)
+  call everforest#highlight('PmenuExtra', s:palette.grey0, s:palette.bg_dim)
+elseif s:configuration.pmenu_style ==# 'blend'
+  call everforest#highlight('Pmenu', s:palette.fg, s:palette.bg0)
+  call everforest#highlight('PmenuSbar', s:palette.none, s:palette.bg0)
+  call everforest#highlight('PmenuThumb', s:palette.none, s:palette.bg4)
+  call everforest#highlight('PmenuKind', s:palette.green, s:palette.bg0)
+  call everforest#highlight('PmenuExtra', s:palette.grey1, s:palette.bg0)
+else
+  call everforest#highlight('Pmenu', s:palette.fg, s:palette.bg2)
+  call everforest#highlight('PmenuSbar', s:palette.none, s:palette.bg2)
+  call everforest#highlight('PmenuThumb', s:palette.none, s:palette.grey0)
+  call everforest#highlight('PmenuKind', s:palette.green, s:palette.bg2)
+  call everforest#highlight('PmenuExtra', s:palette.grey2, s:palette.bg2)
+endif
 call everforest#highlight('PmenuSel', s:palette.bg0, s:palette.statusline1)
-call everforest#highlight('PmenuKind', s:palette.green, s:palette.bg2)
-call everforest#highlight('PmenuExtra', s:palette.grey2, s:palette.bg2)
 highlight! link WildMenu PmenuSel
-call everforest#highlight('PmenuThumb', s:palette.none, s:palette.grey0)
 if s:configuration.float_style ==# 'dim'
   call everforest#highlight('NormalFloat', s:palette.fg, s:palette.bg_dim)
   call everforest#highlight('FloatBorder', s:palette.grey1, s:palette.bg_dim)
@@ -1493,18 +1507,39 @@ highlight! link MiniPickPrompt NormalFloat
 if s:configuration.float_style ==# 'dim'
   call everforest#highlight('MiniPickPromptPrefix', s:palette.orange, s:palette.bg_dim)
   call everforest#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg_dim)
+  call everforest#highlight('MiniInputCaret', s:palette.blue, s:palette.bg_dim)
+  call everforest#highlight('MiniInputAdded', s:palette.green, s:palette.bg_dim)
+  call everforest#highlight('MiniInputHint', s:palette.grey1, s:palette.bg_dim)
+  call everforest#highlight('MiniInputSpecial', s:palette.orange, s:palette.bg_dim)
+  call everforest#highlight('MiniInputHide', s:palette.yellow, s:palette.bg0, 'bold')
 elseif s:configuration.float_style ==# 'blend'
   if s:configuration.transparent_background
     highlight! link MiniPickPromptPrefix Orange
     highlight! link MiniPickPromptCaret Blue
+    highlight! link MiniInputCaret Blue
+    highlight! link MiniInputAdded Green
+    highlight! link MiniInputHint Grey
+    highlight! link MiniInputSpecial Orange
+    call everforest#highlight('MiniInputHide', s:palette.yellow, s:palette.none, 'bold')
   else
     call everforest#highlight('MiniPickPromptPrefix', s:palette.orange, s:palette.bg0)
     call everforest#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg0)
+    call everforest#highlight('MiniInputCaret', s:palette.blue, s:palette.bg0)
+    call everforest#highlight('MiniInputAdded', s:palette.green, s:palette.bg0)
+    call everforest#highlight('MiniInputHint', s:palette.grey1, s:palette.bg0)
+    call everforest#highlight('MiniInputSpecial', s:palette.orange, s:palette.bg0)
+    call everforest#highlight('MiniInputHide', s:palette.yellow, s:palette.bg1, 'bold')
   endif
 else
   call everforest#highlight('MiniPickPromptPrefix', s:palette.orange, s:palette.bg2)
   call everforest#highlight('MiniPickPromptCaret', s:palette.blue, s:palette.bg2)
+  call everforest#highlight('MiniInputCaret', s:palette.blue, s:palette.bg2)
+  call everforest#highlight('MiniInputAdded', s:palette.green, s:palette.bg2)
+  call everforest#highlight('MiniInputHint', s:palette.grey1, s:palette.bg2)
+  call everforest#highlight('MiniInputSpecial', s:palette.orange, s:palette.bg2)
+  call everforest#highlight('MiniInputHide', s:palette.yellow, s:palette.bg4, 'bold')
 endif
+highlight! link MiniInputPrompt FloatTitle
 call everforest#highlight('MiniStarterCurrent', s:palette.none, s:palette.none, 'nocombine')
 call everforest#highlight('MiniStatuslineDevinfo', s:palette.grey2, s:palette.bg3)
 call everforest#highlight('MiniStatuslineFilename', s:palette.grey1, s:palette.bg1)
@@ -1591,6 +1626,18 @@ highlight! link NeotestPassed GreenSign
 highlight! link NeotestFailed RedSign
 highlight! link NeotestRunning YellowSign
 highlight! link NeotestSkipped BlueSign
+" }}}
+" carlos-algms/agentic.nvim {{{
+call everforest#highlight('AgenticDiffAddWord', s:palette.bg0, s:palette.bg_green, 'bold')
+call everforest#highlight('AgenticDiffDeleteWord', s:palette.bg0, s:palette.bg_red, 'bold')
+call everforest#highlight('AgenticSpinnerGenerating', s:palette.blue, s:palette.none, 'bold')
+call everforest#highlight('AgenticSpinnerSearching', s:palette.yellow, s:palette.none, 'bold')
+call everforest#highlight('AgenticSpinnerThinking', s:palette.purple, s:palette.none, 'bold')
+call everforest#highlight('AgenticStatusCompleted', s:palette.bg0, s:palette.green)
+call everforest#highlight('AgenticStatusFailed', s:palette.bg0, s:palette.red)
+call everforest#highlight('AgenticStatusPending', s:palette.bg0, s:palette.purple)
+call everforest#highlight('AgenticThinking', s:palette.bg0, s:palette.bg3)
+call everforest#highlight('AgenticTitle', s:palette.bg0, s:palette.blue, 'bold')
 " }}}
 endif
 " }}}
