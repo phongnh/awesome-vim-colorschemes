@@ -69,7 +69,7 @@ black&white color scheme.
 If your Vim supports packages (`echo has('packages')` prints `1`), I strongly
 recommend that you use them. Just clone this repo inside `pack/*/opt`, e.g.:
 
-    git clone https://github.com/lifepillar/vim-solarized8.git \
+    git clone https://codeberg.org/lifepillar/vim-solarized8.git \
         ~/.vim/pack/themes/opt/solarized8
 
 Otherwise, use you favourite installation method.
