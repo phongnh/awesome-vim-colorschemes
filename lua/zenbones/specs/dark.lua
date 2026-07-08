@@ -347,7 +347,7 @@ local function generate(p, opt)
 			sym "@lsp.type.string"                        { sym "@string" },
 			sym "@lsp.type.typeAlias"                     { sym "@type.definition" },
 			sym "@lsp.type.unresolvedReference"           { gui = "undercurl", sp = Error.fg },
-			sym "@lsp.type.variable"                      { },
+			sym "@lsp.type.variable"                      { sym "@variable" },
 			sym "@lsp.typemod.class.defaultLibrary"       { sym "@type.builtin" },
 			sym "@lsp.typemod.enum.defaultLibrary"        { sym "@type.builtin" },
 			sym "@lsp.typemod.enumMember.defaultLibrary"  { sym "@constant.builtin" },
@@ -375,6 +375,10 @@ local function generate(p, opt)
 			diffFile                  { fg = p.wood, gui = "bold" },
 			diffLine                  { fg = p.blossom, gui = "bold" },
 			diffIndexLine             { fg = p.wood },
+
+			Added                     { fg = p.leaf },
+			Removed                   { fg = p.rose },
+			Changed                   { fg = p.water },
 
 			gitcommitOverflow         { WarningMsg },
 
